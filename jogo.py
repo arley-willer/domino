@@ -152,7 +152,7 @@ class Domino:
                                 break
                             
                 else:
-                    ### FAZER A IA JOGAR AQUI ###
+                    # Verifica o jogador da vez
                     for i in range(len(self.hand1)):
                         # Verifica se alguma peça bate com a borda esquerda
                         if self.hand1[i][0] == self.edges[0]:
