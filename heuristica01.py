@@ -1,6 +1,3 @@
-# sempre jogar a peça com mais backup
-# se empatar jogar a mais alta
-
 import random
 import json
 import ast
@@ -60,7 +57,7 @@ class Domino:
 
     def data(self):
         return {
-            'Rodada': self.round,
+            'Turno': self.round,
             'Campo': self.field,
             'Bordas': self.edges,
             'Hands': [self.hand0, self.hand1],
