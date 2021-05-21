@@ -19,6 +19,8 @@ class Domino:
         self.biggest = [[],0,0]
         self.hasWinner = False
         self.round = 0
+        self.qtd0 = qtd0
+        self.qtd1 = qtd1
         # Emabaralha e distribui as peças 
         self.shuffle = random.sample(self.pieces, len(self.pieces))
         for _ in range(qtd0):
@@ -74,6 +76,12 @@ class Domino:
         elif len(self.hand1) == 0:
             self.hasWinner = True
             self.winner = 1
+        elif len(self.hand0) + len(self.rest) < len(self.hand1):
+            self.hasWinner = True
+            self.winner = 0
+        elif len(self.hand1) + len(self.rest) < len(self.hand0):
+            self.hasWinner = True
+            self.winner = 1
         else:
             # Verifica se o jogador tem jogadas válidas
             if self.valid():
@@ -123,7 +131,6 @@ class Domino:
                                 self.edges[j] = self.biggest[0][1]
                                 # Adiciona a nova peça no campo
                                 self.field.append(self.biggest[0])
-                                print(self.data())
                                 # Remove a peça da mão
                                 del self.hand0[self.hand0.index(self.biggest[0])]
                                 # Avança o turno
@@ -249,14 +256,19 @@ def IA(field, edges, player, enemy):
     # 28 possíveis peças pro campo + 28 possíveis peças pra mão + 28 possíveis quantidades de peças do oponente + 6 possíveis valores na borda
     return field_ia + player_ia + enemy_ia + edges_ia
 
-data = []
+def save(game):
+    arquivo = open("teste.txt","a")
+    game = json.dumps(game)
+    arquivo.write(game)
+    arquivo.close()
+
 domino = Domino()
 
-# Quantidade de peças na mão de cada jogador
-qtd0 = 3
-qtd1 = 3
-
-for i in range(10):
+for ii in range(100):
+    data = []
+    # Quantidade de peças na mão de cada jogador
+    qtd0 = 3
+    qtd1 = 3
     # Início do jogo
     domino.start(qtd0,qtd1)
     # Variável que armazena as rodadas
@@ -265,14 +277,14 @@ for i in range(10):
         # Verifica se alguém ganhou
         if domino.hasWinner:
             break
-        
+
         # Armazenando as informações da rodada
         rodadas += str(domino.data()) + ','
         domino.play()
 
     # Armazenando as informações do jogo
     jogo = {
-        'Jogo': i,
+        'Jogo': ii,
         'Resultado': domino.winner,
         'Rodadas': ast.literal_eval(rodadas[:-1])
     }
@@ -281,7 +293,5 @@ for i in range(10):
     else:
         qtd0 += 1
     data.append(jogo)
-
-data = json.dumps(data)
-arquivo = open("teste.txt","a")
-arquivo.write(data)
+    save(data)
+    
