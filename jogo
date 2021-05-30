@@ -1,0 +1,224 @@
+import pygame
+from pygame.locals import *
+from sys import exit
+from random import randint
+
+pygame.init()
+
+largura = 1200
+altura = 550
+
+bgColor = (50,50,50)
+
+tela = pygame.display.set_mode((largura,altura))
+pygame.display.set_caption('Dominó')
+
+def redimensionaPecas(img, escala):
+	s = pygame.transform.scale(img, (int(225*escala), int(125*escala)))
+	return s
+
+zero_zero = pygame.image.load('peças/00.png')
+zero_um = pygame.image.load('peças/01.png')
+zero_dois = pygame.image.load('peças/02.png')
+zero_tres = pygame.image.load('peças/03.png')
+zero_quatro = pygame.image.load('peças/04.png')
+zero_cinco = pygame.image.load('peças/05.png')
+zero_seis = pygame.image.load('peças/06.png')
+um_um = pygame.image.load('peças/11.png')
+um_dois = pygame.image.load('peças/12.png')
+um_tres = pygame.image.load('peças/13.png')
+um_quatro = pygame.image.load('peças/14.png')
+um_cinco = pygame.image.load('peças/15.png')
+um_seis = pygame.image.load('peças/16.png')
+dois_dois = pygame.image.load('peças/22.png')
+dois_tres = pygame.image.load('peças/23.png')
+dois_quatro = pygame.image.load('peças/24.png')
+dois_cinco = pygame.image.load('peças/25.png')
+dois_seis = pygame.image.load('peças/26.png')
+tres_tres = pygame.image.load('peças/33.png')
+tres_quatro = pygame.image.load('peças/34.png')
+tres_cinco = pygame.image.load('peças/35.png')
+tres_seis = pygame.image.load('peças/36.png')
+quatro_quatro = pygame.image.load('peças/44.png')
+quatro_cinco = pygame.image.load('peças/45.png')
+quatro_seis = pygame.image.load('peças/46.png')
+cinco_cinco = pygame.image.load('peças/55.png')
+cinco_seis = pygame.image.load('peças/56.png')
+seis_seis = pygame.image.load('peças/66.png')
+
+
+zero_zero = redimensionaPecas(zero_zero, 0.4)
+zero_um = redimensionaPecas(zero_um, 0.4)
+zero_dois = redimensionaPecas(zero_dois, 0.4)
+zero_tres = redimensionaPecas(zero_tres, 0.4)
+zero_quatro = redimensionaPecas(zero_quatro, 0.4)
+zero_cinco = redimensionaPecas(zero_cinco, 0.4)
+zero_seis = redimensionaPecas(zero_seis, 0.4)
+um_um = redimensionaPecas(um_um, 0.4)
+um_dois = redimensionaPecas(um_dois, 0.4)
+um_tres = redimensionaPecas(um_tres, 0.4)
+um_quatro = redimensionaPecas(um_quatro, 0.4)
+um_cinco = redimensionaPecas(um_cinco, 0.4)
+um_seis = redimensionaPecas(um_seis, 0.4)
+dois_dois = redimensionaPecas(dois_dois, 0.4)
+dois_tres = redimensionaPecas(dois_tres, 0.4)
+dois_quatro = redimensionaPecas(dois_quatro, 0.4)
+dois_cinco = redimensionaPecas(dois_cinco, 0.4)
+tres_tres = redimensionaPecas(tres_tres, 0.4)
+tres_quatro = redimensionaPecas(tres_quatro, 0.4)
+tres_cinco = redimensionaPecas(tres_cinco, 0.4)
+tres_seis = redimensionaPecas(tres_seis, 0.4)
+quatro_quatro = redimensionaPecas(quatro_quatro, 0.4)
+quatro_cinco = redimensionaPecas(quatro_cinco, 0.4)
+quatro_seis = redimensionaPecas(quatro_seis, 0.4)
+cinco_cinco = redimensionaPecas(cinco_cinco, 0.4)
+cinco_seis = redimensionaPecas(cinco_seis, 0.4)
+seis_seis = redimensionaPecas(seis_seis, 0.4)
+
+
+pecas = []
+pecas.append(zero_zero)
+pecas.append(zero_um)
+pecas.append(zero_dois)
+pecas.append(zero_tres)
+pecas.append(zero_quatro)
+pecas.append(zero_cinco)
+pecas.append(zero_seis)
+pecas.append(um_um)
+pecas.append(um_dois)
+pecas.append(um_tres)
+pecas.append(um_quatro)
+pecas.append(um_cinco)
+pecas.append(um_seis)
+pecas.append(dois_dois)
+pecas.append(dois_tres)
+pecas.append(dois_quatro)
+pecas.append(dois_cinco)
+pecas.append(dois_seis)
+pecas.append(tres_tres)
+pecas.append(tres_quatro)
+pecas.append(tres_cinco)
+pecas.append(tres_seis)
+pecas.append(quatro_quatro)
+pecas.append(quatro_cinco)
+pecas.append(quatro_seis)
+pecas.append(cinco_cinco)
+pecas.append(cinco_seis)
+pecas.append(seis_seis)
+
+pecasMapeadas = [
+					('0', '0'),
+					('0', '1'),
+					('0', '2'),
+					('0', '3'),
+					('0', '4'),
+					('0', '5'),
+					('0', '6'),
+					('1', '1'),
+					('1', '2'),
+					('1', '3'),
+					('1', '4'),
+					('1', '5'),
+					('1', '6'),
+					('2', '2'),
+					('2', '3'),
+					('2', '4'),
+					('2', '5'),
+					('2', '6'),
+					('3', '3'),
+					('3', '4'),
+					('3', '5'),
+					('3', '6'),
+					('4', '4'),
+					('4', '5'),
+					('4', '6'),
+					('5', '5'),
+					('5', '6'),
+					('6', '6')
+]
+
+relogio = pygame.time.Clock()
+
+tela.fill(bgColor)
+jogoIniciado = False
+proximaJogada = False
+
+while True:
+	relogio.tick(30)
+	# tela.fill(bgColor)
+	for event in pygame.event.get():
+		# encerra o jogo ao fechar a janela
+		if event.type == QUIT: 
+			pygame.quit()
+			exit()
+		
+		# ação ao pressionar qualquer tecla
+		if event.type == KEYDOWN: 
+			# próxima jogada
+			if jogoIniciado == True and proximaJogada == False:
+				ladoDireitoDaPecaPrimeiraJogada = pecasMapeadas[primeiraJogada][0]
+				ladoEsquerdoDaPecaPrimeiraJogada = pecasMapeadas[primeiraJogada][1]
+
+				# 0 = lado esquerdo; 1 = lado direito
+				escolheLado = randint(0,1) 
+				if escolheLado == 0:
+					for i in range(27):
+						# encontra o "match"
+						if ladoEsquerdoDaPecaPrimeiraJogada == pecasMapeadas[i][0] or ladoEsquerdoDaPecaPrimeiraJogada == pecasMapeadas[i][1]:
+							print(f'Achei {pecasMapeadas[i]}')
+							if pecasMapeadas[i][0] != ladoDireitoDaPecaPrimeiraJogada or pecasMapeadas[i][1] != ladoEsquerdoDaPecaPrimeiraJogada:
+								ladoDireitoDaPeca = pecasMapeadas[i][0]
+								ladoEsquerdoDaPeca = pecasMapeadas[i][1]
+
+								# deixa "em pé" se a peça for uma carroça
+								if ladoEsquerdoDaPeca == ladoDireitoDaPeca: 
+									img = pecas[i].copy()
+									img = pygame.transform.rotate(img,90)
+									tela.blit(img, (468, 230))
+									break
+								else:
+									img = pecas[i].copy()
+									img = pygame.transform.rotate(img,180)
+									tela.blit(img, (468, 250))
+									break
+					proximaJogada = True
+				
+				if escolheLado == 1:
+					for i in range(27):
+						if ladoDireitoDaPecaPrimeiraJogada == pecasMapeadas[i][0] or ladoDireitoDaPecaPrimeiraJogada == pecasMapeadas[i][1]:
+							print(f'Achei {pecasMapeadas[i]}')
+							if pecasMapeadas[i][0] != ladoDireitoDaPecaPrimeiraJogada or pecasMapeadas[i][1] != ladoEsquerdoDaPecaPrimeiraJogada:
+								ladoDireitoDaPeca = pecasMapeadas[i][0]
+								ladoEsquerdoDaPeca = pecasMapeadas[i][1]
+								
+								# deixa "em pé" se a peça for uma carroça
+								if ladoEsquerdoDaPeca == ladoDireitoDaPeca:
+									img = pecas[i].copy()
+									img = pygame.transform.rotate(img,90)
+									tela.blit(img, (642, 230))
+									break
+								else:
+									tela.blit(pecas[i], (642, 250))
+									break
+
+
+
+
+				
+	
+	if jogoIniciado == False:
+		primeiraJogada = randint(0,27)
+		imgRect = pecas[primeiraJogada].get_rect(center = tela.get_rect().center)
+
+		tela.blit(pecas[primeiraJogada], imgRect)
+		jogoIniciado = True
+
+		
+
+
+
+
+
+	pygame.display.flip()
+
+
